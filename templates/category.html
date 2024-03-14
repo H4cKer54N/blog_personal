@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{title_window}}
+{% endblock title %}
+{% block content %}
+<section>
+  <div class="container">
+    <div class="row">
+      {% if object_list %}
+      <div class="col-md-9" data-aos="fade-up">
+        <h3 class="category-title">{{title}}</h3>
+        {% for i in object_list %}
+        <div class="d-md-flex post-entry-2 half">
+          <a href="{% url "detail_post" i.slug %}" class="me-4 thumbnail">
+            <img src="{% if i.image %}{{i.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="Imagen de post" class="img-fluid">
+          </a>
+          <div>
+            <div class="post-meta"><span class="date">
+              {% for j in i.tags.all %}
+                <a href="{% url "search_by_tag" j %}">{{ j }}</a>
+                {% if not forloop.last and i.tags.all|length > 1 %},{% endif %}
+            {% endfor %}
+            </span> <span class="mx-1">&bullet;</span> <span>{{i.date_posted|date:"l d/m/Y"}}</span></div>
+            <h3><a href="{% url "detail_post" i.slug %}">{{i.title}}</a></h3>
+            <p>{{i.content|safe|truncatewords:46}}</p>
+            <div class="d-flex align-items-center author">
+              <div class="name">
+                <h3 class="m-0 p-0"><a href="{% url "search_by_user" i.author.username %}">{{i.get_posted_info}}</a></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="col-md-9" data-aos="fade-up">
+      <h1>No hay posts con esta categoría aún</h1>
+      </div>
+      {% endif %}
+      <div class="col-md-3">
+        <div class="aside-block">
+          <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Últimos</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            {% for i in last_5 %}
+            <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
+              <div class="post-entry-1 border-bottom">
+                <div class="post-meta"><span class="date">{% for j in i.tags.all %}
+                  <a href="{% url "search_by_tag" j %}">{{ j }}</a>
+                  {% if not forloop.last and i.tags.all|length > 1 %},{% endif %}
+              {% endfor %}</span> <span class="mx-1">&bullet;</span> <span>{{i.date_posted|date:"d/m/Y"}}</span></div>
+                <h2 class="mb-2"><a href="{% url "detail_post" i.slug %}">{{i.title}}</a></h2>
+                <span class="author mb-3 d-block"><a href="{% url "search_by_user" i.author.username %}">{{i.author.username}}</a></span>
+              </div>
+            </div> 
+            {% endfor %}
+          </div>
+        </div>
+        <div class="aside-block">
+          <h3 class="aside-title">Categorías</h3>
+          <ul class="aside-links list-unstyled">
+            {% for dropdown in dropdowns %}
+              <li><a href="{% url "search_by_tag" dropdown.name %}"><i class="bi bi-chevron-right"></i> {{dropdown.name}}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>
+      H4cker54n |{% block title %}
+      {% endblock %}
+    </title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <link href="assets/img/favicon.png" rel="icon" />
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/variables.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+        <a href="{% url 'index' %}" class="logo d-flex align-items-center"><h1>H4cker54n</h1></a>
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li>
+              <a href="{% url 'index' %}">Blog</a>
+            </li>
+            <li class="dropdown">
+              <a href="#"><span>Categorías</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                {% for dropdown in dropdowns %}
+                  <li>
+                    <a href="{% url 'search_by_tag' dropdown.name %}">{{ dropdown.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+            <li>
+              <a href="#about_me">Sobre mi</a>
+            </li>
+            <li>
+              <a href="{% url "contact" %}">Contáctame</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="position-relative">
+          <a href="https://www.linkedin.com/in/santiagobritos/" target="_blank" class="mx-2"><span class="bi-linkedin"></span></a>
+          <a href="https://github.com/H4cKer54N" target="_blank" class="mx-2"><span class="bi-instagram"></span></a>
+          <a style="display: none;" href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+          <div class="search-form-wrap js-search-form-wrap">
+            <form action="search-result.html" class="search-form">
+              <span class="icon bi-search"></span>
+              <input type="text" placeholder="Search" class="form-control" />
+              <button class="btn js-search-close"><span class="bi-x"></span></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      {% block content %}
+      <section id="hero-slider" class="hero-slider">
+        <div class="container-md" data-aos="fade-in">
+          <div class="row">
+            <div class="col-12">
+              <div class="swiper sliderFeaturedPosts">
+                <div class="swiper-wrapper">
+                  {% for i in hero %}
+                    <div class="swiper-slide">
+                      <a href="{% url "detail_post" i.slug %}" class="img-bg d-flex align-items-end" style="background-image: url('{% if i.image %}{{i.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}');">
+                        <div class="img-bg-inner">
+                          <h2>{{i.title}}</h2>
+                          <p>{{i.content|safe|truncatewords:40}}</p>
+                        </div>
+                      </a>
+                    </div>
+                  {% endfor %}    
+                <div class="custom-swiper-button-next">
+                  <span class="bi-chevron-right"></span>
+                </div>
+                <div class="custom-swiper-button-prev">
+                  <span class="bi-chevron-left"></span>
+                </div>
+    
+                <div class="swiper-pagination"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+              <section id="posts" class="posts">
+          <div class="container" data-aos="fade-up">
+            <div class="row g-5">
+              <div class="col-lg-4">
+                <div class="post-entry-1 lg">
+                  <a href="{% url "detail_post" posts.0.slug %}"><img src="{% if posts.0.image %}{{posts.0.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="Imagen del post" class="img-fluid" /></a>
+                  <div class="post-meta">
+                    <span class="date">
+                      {% for i in posts.0.tags.all %}
+                        <a href="{% url 'search_by_tag' i %}">{{i.name}}{% if not forloop.last and posts.0.tags.all|length > 1 %},{% endif %}</a>
+                      {% endfor %}
+                    </span> <span class="mx-1">&bullet;</span> <span>{{posts.0.date_posted}}</span>
+                  </div>
+                  <h2><a href="{% url "detail_post" posts.0.slug %}">{{posts.0.title}}</a></h2>
+                  <p class="mb-4 d-block">{{posts.0.content|safe|truncatewords:50}}</p>
+
+                  <div class="d-flex align-items-center author">
+                    <div class="name">
+                      <h3 class="m-0 p-0">{{posts.0.author.username}}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="row g-5">
+                  {% if i.posts|length > 1 %}
+                    {% for i in posts|slice:"1:5" %}
+                      <div class="col-lg-4 border-start custom-border">
+                        <div class="post-entry-1">
+                          <a href="{% url "detail_post" i.slug %}"><img src="{% if i.image %}{{i.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="" class="img-fluid"></a>
+                          <div class="post-meta"><span class="date">{% for j in i.tags.all %}{{j}} {% if not forloop.last and i.tags.all|length > 1 %}, {% endif %}{% endfor %}
+                          </span> <span class="mx-1">&bullet;</span> <span>{{i.date_posted|date:"d/m/Y"}}</span></div>
+                          <h2><a href="{% url "detail_post" i.slug %}">{{i.title}}</a></h2>
+                        </div>                    
+                      </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-lg-4 border-start custom-border">
+                    <h3>No hay elementos para mostrar</h3>
+                    </div>
+                  {% endif %}
+                  {% if i.posts|length > 5 %}
+                    {% for i in posts|slice:"5:9" %}
+                      <div class="col-lg-4 border-start custom-border">
+                        <div class="post-entry-1">
+                          <a href="{% url "detail_post" i.slug %}"><img src="{% if i.image %}{{i.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="" class="img-fluid"></a>
+                          <div class="post-meta"><span class="date">{% for j in i.tags.all %}{{j}} {% if not forloop.last and i.tags.all|length > 1 %}, {% endif %}{% endfor %}
+                          </span> <span class="mx-1">&bullet;</span> <span>{{i.date_posted|date:"d/m/Y"}}</span></div>
+                          <h2><a href="{% url "detail_post" i.slug %}">{{i.title}}</a></h2>
+                        </div>                    
+                      </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-lg-4 border-start custom-border">
+                    <h3>No hay elementos para mostrar</h3>
+                  </div>
+                  {% endif %}
+                  
+                  <div class="col-lg-4">
+
+                    <div class="trending">
+                      <h3>Tendencias</h3>
+                      <ul class="trending-post">
+                        {% if trending %}
+                          {% for i in trending %}
+                          <li>
+                            <a href="{% url "detail_post" i.slug %}">
+                              <h3>{{i.title}}</h3>
+                              <span class="author">{{i.author.username}}</span>
+                            </a>
+                          </li>
+                          {% endfor %}
+                        {% else %}
+                        <h5 class="text-center">
+                          En este momento no hay ninguna tendencia
+                        </h5>
+                        {% endif %}
+                      </ul>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {% for i in posts_por_tag %}
+        {% if i.posts %}
+        <section class="category-section">
+          <div class="container" data-aos="fade-up">
+    
+            <div class="section-header d-flex justify-content-between align-items-center mb-5">
+              <h2>{{i.tag}}</h2>
+              <div><a href="{% url "search_by_tag" i.tag.name %}" class="more">Ver todo {{i.tag}}</a></div>
+            </div>
+            <div class="row">
+              <div class="col-md-9">
+                <div class="d-lg-flex post-entry-2">
+                  <a href="{% url "detail_post" i.posts.0.slug %}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                    <img src="{% if i.posts.0.image %}{{i.posts.0.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="" class="img-fluid">
+                  </a>
+                  <div>
+                    <div class="post-meta"><span class="date">{% for j in i.posts.0.tags.all %}{{j}} {% if not forloop.last and i.posts.0.tags.all|length > 1 %}, {% endif %}{% endfor %}</span> <span class="mx-1">&bullet;</span> <span>{{i.posts.0.date_posted|date:"d/m/Y"}}</span></div>
+                    <h3><a href="{% url "detail_post" i.posts.0.slug %}">{{i.posts.0.title}}</a></h3>
+                    <p>{{i.posts.0.content|safe|truncatewords:45}}</p>
+                    <div class="d-flex align-items-center author">
+                      <div class="name">
+                        <a href="/user/{{i.posts.0.author.username}}"><h3 class="m-0 p-0">{{i.posts.0.author.username}}</h3></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% if i.posts|length > 1 %}
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="post-entry-1 border-bottom">
+                        <a href="{% url "detail_post" i.posts.1.slug %}"><img src="{% if i.posts.1.image %}{{i.posts.1.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="" class="img-fluid"></a>
+                        <div class="post-meta"><span class="date">{% for j in i.posts.1.tags.all %}{{j}} {% if not forloop.last and i.posts.1.tags.all|length > 1 %}, {% endif %}{% endfor %}</span> <span class="mx-1">&bullet;</span> <span>{{i.posts.1.date_posted|date:"d/m/Y"}}</span></div>
+                        <h2 class="mb-2"><a href="{% url "detail_post" i.posts.1.slug %}">{{i.posts.1.title}}</a></h2>
+                        <span class="author mb-3 d-block">{{i.posts.1.author.username}}</span>
+                        <p class="mb-4 d-block">{{i.posts.1.content|safe|truncatewords:15}}</p>
+                      </div>
+                      <div class="post-entry-1">
+                        <div class="post-meta"><span class="date">{% for j in i.posts.2.tags.all %}{{j}} {% if not forloop.last and i.posts.2.tags.all|length > 1 %}, {% endif %}{% endfor %}</span> <span class="mx-1">&bullet;</span> <span>{{i.posts.2.date_posted|date:"d/m/Y"}}</span></div>
+                        <h2 class="mb-2"><a href="{% url "detail_post" i.posts.2.slug %}">{{i.posts.2.title}}</a></h2>
+                        <span class="author mb-3 d-block">{{i.posts.2.author.username}}</span>
+                      </div>
+                    </div>
+                    <div class="col-lg-8">
+                      <div class="post-entry-1">
+                        <a href="single-post.html"><img src="{% if i.posts.3.image %}{{i.posts.3.image.url}}{% else %}{% static 'no-image.webp' %}{% endif %}" alt="" class="img-fluid"></a>
+                        <div class="post-meta"><span class="date">{% for j in i.posts.3.tags.all %}{{j}} {% if not forloop.last and i.posts.3.tags.all|length > 1 %}, {% endif %}{% endfor %}</span> <span class="mx-1">&bullet;</span> <span>{{i.posts.3.date_posted|date:"d/m/Y"}}</span></div>
+                        <h2 class="mb-2"><a href="{% url "detail_post" i.posts.3.slug %}">{{i.posts.3.title}}</a></h2>
+                        <span class="author mb-3 d-block">{{i.posts.3.author.username}}</span>
+                        <p class="mb-4 d-block">{{i.posts.3.content|safe|truncatewords:40}}</p>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+              {% if i.posts|length > 3 %}
+                <div class="col-md-3">
+                  {% for j in posts %}
+                    {% if forloop.posts > 3 and forloop.posts < 8 %}
+                      <div class="post-entry-1 border-bottom">
+                        <div class="post-meta"><span class="date">{% for j in i.tags.all %}{{j}} {% if not forloop.last and i.tags.all|length > 1 %}, {% endif %}{% endfor %}</span> <span class="mx-1">&bullet;</span> <span>{{i.date_posted|date:"d/m/Y"}}</span></div>
+                        <h2 class="mb-2"><a href="{% url "detail_post" i.slug %}">{{i.title}}</a></h2>
+                        <span class="author mb-3 d-block">{{i.author.username}}</span>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
+        {% endfor %}
+        {% endblock %}
+    </main>
+
+    <footer id="footer" class="footer">
+      {% include 'components/footer-top.html' %}
+      {% include 'components/footer-bottom.html' %}
+    </footer>
+
+    <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script>hljs.highlightAll();</script>
+
+  </body>
+</html>
