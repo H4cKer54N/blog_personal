@@ -6,6 +6,17 @@ from .decorators import add_dropdowns_to_context
 from django.utils.decorators import method_decorator
 from .models import ContactForm, Post, Tags
 from django.db.models import Count
+from django.contrib.sitemaps import Sitemap
+
+class PostSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.9
+
+    def items(self):
+        return Post.objects.filter()
+
+    def lastmod(self, obj):
+        return obj.pub_date
 
 @method_decorator(add_dropdowns_to_context, name='get_context_data')
 class IndexView(ListView):

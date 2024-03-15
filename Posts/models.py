@@ -4,7 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 class Tags(models.Model):
     name = models.CharField(max_length=100)
-    color = models.CharField(max_length=20)
+    color = models.CharField(max_length=20, null=True,blank=True)
 
     def __str__(self):
         return self.name
@@ -15,7 +15,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=100, unique=True)
-    image = models.ImageField(upload_to='post_images')
+    image = models.ImageField(upload_to='post_images', null=True, blank=True)
     tags = models.ManyToManyField(Tags)
     time_to_read = models.IntegerField(default=0)
     trending = models.BooleanField(default=False)

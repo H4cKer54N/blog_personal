@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -9,9 +9,20 @@
       H4cker54n |{% block title %}
       {% endblock %}
     </title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
-    <link href="assets/img/favicon.png" rel="icon" />
+    <meta property="og:title" content="Blog personal h4cker54n">
+    <meta property="og:description" content="Blog personal hablando acerca de programación y la vida">
+    <meta property="og:image" content="{%static 'h4cker54n.webp'%}">
+    <meta property="og:url" content="https://h4cker54n.it">
+    <meta property="og:type" content="website">
+    <meta name="twitter:title" content="Blog personal h4cker54n">
+    <meta name="twitter:description" content="Blog personal hablando acerca de programación y la vida">
+    <meta name="twitter:image" content="{%static 'h4cker54n.webp'%}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <meta content="Blog personal hablando acerca de programación y la vida" name="description" />
+    <meta content="Programación,Python,Django,Astro,Reflex,Vida" name="keywords" />
+    <meta name="author" content="H4cker54n">
+    <link href="{% static 'h4cker54n.webp' %}" rel="icon" />
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,7 +66,7 @@
         </nav>
         <div class="position-relative">
           <a href="https://www.linkedin.com/in/santiagobritos/" target="_blank" class="mx-2"><span class="bi-linkedin"></span></a>
-          <a href="https://github.com/H4cKer54N" target="_blank" class="mx-2"><span class="bi-instagram"></span></a>
+          <a href="https://github.com/H4cKer54N" target="_blank" class="mx-2"><span class="bi-github"></span></a>
           <a style="display: none;" href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
           <i class="bi bi-list mobile-nav-toggle"></i>
           <div class="search-form-wrap js-search-form-wrap">
